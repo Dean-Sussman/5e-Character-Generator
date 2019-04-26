@@ -1,6 +1,9 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 
 
 //FIXME can't find file sometimes
@@ -9,11 +12,17 @@ import java.nio.file.Paths;
 public class NameGeneration {
 	public static void main(String[] args) throws IOException {
 		
-		String firstname = Files.readAllLines(Paths.get("dist.female.first.txt")).get(0);
+		
+		Random rand = new Random();
+		
+		String firstname = Files.readAllLines(Paths.get("src/dist.female.first.txt")).get(rand.nextInt(5495));
 
+		firstname = firstname.split(" ")[0];
 		
-		String lastname = Files.readAllLines(Paths.get("dist.all.last.txt")).get(50);
+		String lastname = Files.readAllLines(Paths.get("src/dist.all.last.txt")).get(rand.nextInt(151672));
 		
-		System.out.println(firstname + lastname);
+		lastname = lastname.split(" ")[0];
+		
+		System.out.println(firstname + " " + lastname);
 	}
 }
