@@ -1,5 +1,8 @@
 import java.util.Scanner;
 import java.util.Random;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.InputMismatchException;
@@ -8,18 +11,32 @@ enum PlayerClass{
 	BARBARIAN, BARD, CLERIC, DRUID, DEX_FIGHTER_EK, STR_FIGHTER_EK, STR_FIGHTER, DEX_FIGHTER, MONK, PALADIN, RANGER, INT_ROGUE, CHA_ROGUE, SORCEROR, WARLOCK, WIZARD;
 }
 
-//TODO: clean up; join with name generation; finish fighter and rogue;
+//TODO: clean up; replace true/false with 1/2 for consistency; finish fighter and rogue;
 //		let player choose race and adjust stats accordingly
+//		format idea: "You are [name], a [class]: "
 public class StatGeneration {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		int statOption = 0;
+		int nameOption = 0;
 		boolean reroll = false;
 		boolean done = false;
+		Random chooser = new Random();
 		String playerClass = "random";
+		String name = "";
 		Integer[] stats = new Integer[6];
 
 		
+		
 		Scanner input = new Scanner(System.in);
+		
+		System.out.println("Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
+		nameOption = input.nextInt();
+		if(nameOption == 3) {
+			nameOption = chooser.nextInt(2) + 1;
+		}
+		name = nameGenerator(nameOption);
+		
+		
 		System.out.println("Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
 		while(!done) {
 			try {
@@ -90,10 +107,10 @@ public class StatGeneration {
 		
 		
 
+		System.out.println("Your name is: " + name);
 		if(playerClass.equals("random")) {
-			Random classChooser = new Random();
 			PlayerClass classes[] = PlayerClass.values();
-			String randomClass = classes[classChooser.nextInt(16)].toString().toLowerCase();
+			String randomClass = classes[chooser.nextInt(16)].toString().toLowerCase();
 			System.out.println("Your class is: " + randomClass);
 			printStats(randomClass, stats);
 		}else {
@@ -297,5 +314,24 @@ public class StatGeneration {
 			System.out.println("Wisdom: " + stats[2]);
 			System.out.println("Charisma: " + stats[3]);
 		}
+	}
+	
+	public static String nameGenerator(int genderChoice) throws IOException {
+		String firstname = "";
+		String lastname = "";
+		Random rand = new Random();
+		
+		if(genderChoice == 1) {
+			firstname = Files.readAllLines(Paths.get("src/dist.male.first.txt")).get(rand.nextInt(1220));
+		}else if(genderChoice == 2) {
+			firstname = Files.readAllLines(Paths.get("src/dist.female.first.txt")).get(rand.nextInt(4276));
+		}
+		
+		firstname = firstname.split(" ")[0];
+		
+		lastname = Files.readAllLines(Paths.get("src/dist.all.last.txt")).get(rand.nextInt(151672));
+		lastname = lastname.split(" ")[0];
+		
+		return firstname + " " + lastname;
 	}
 }
