@@ -14,10 +14,17 @@ Also allows the user to pick a 'random' option where the program picks the class
 After all choices are made and all generation is done, the program prints out the character in the following fashion: 
 
 You are [NAME], a [CLASS].
+
 Your stats are: 
+
 Strength: X
+
 Dexterity: X
+
 Constitution: X
+
 Intelligence: X
+
 Wisdom: X
+
 Charisma: X
