@@ -11,9 +11,11 @@ enum PlayerClass{
 	BARBARIAN, BARD, CLERIC, DRUID, DEX_FIGHTER_EK, STR_FIGHTER_EK, STR_FIGHTER, DEX_FIGHTER, MONK, PALADIN, RANGER, INT_ROGUE, CHA_ROGUE, SORCEROR, WARLOCK, WIZARD;
 }
 
-//TODO: clean up; replace true/false with 1/2 for consistency; finish fighter and rogue;
-//		let player choose race and adjust stats accordingly
+//TODO: clean up; make sure all inputs are being validated
+//	Ideas for future additions:
+//		let player choose race and adjust stats and name accordingly
 //		format idea: "You are [name], a [class]: "
+//		re-make with buttons/dropdown menus instead of number entry for option choice
 public class StatGeneration {
 	public static void main(String[] args) throws IOException {
 		int statOption = 0;
@@ -30,12 +32,26 @@ public class StatGeneration {
 		Scanner input = new Scanner(System.in);
 		
 		System.out.println("Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
-		nameOption = input.nextInt();
-		if(nameOption == 3) {
-			nameOption = chooser.nextInt(2) + 1;
+		while(!done) {
+			try {
+				nameOption = input.nextInt();
+				if(nameOption < 1  || nameOption > 3) {
+					done = false;
+					System.out.println("Invalid input. Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
+				}else {
+					if(nameOption == 3) {
+						nameOption = chooser.nextInt(2) + 1;
+					}
+					name = nameGenerator(nameOption);
+					done = true;
+				}
+			}catch(InputMismatchException x) {
+				System.out.println("Invalid input. Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
+				input.next();
+			}
 		}
-		name = nameGenerator(nameOption);
-		
+
+		done = false;
 		
 		System.out.println("Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
 		while(!done) {
@@ -55,30 +71,65 @@ public class StatGeneration {
 		}
 
 		if(statOption != 1) { //can't reroll a predetermined array
-			System.out.println("Enter \"true\" to reroll 1s, or \"false\" to not: ");
+			System.out.println("Enter 1 to reroll 1s, or 2 to not: ");
+			//could have user enter true/false and read a boolean, but it would be awkward with every other option being
+			//determined by 1/2/etc
 			done = false;
+			int temp = 0;
 			while(!done) {
 				try {
-					reroll = input.nextBoolean();
-					done = true;
+					temp = input.nextInt();
+					if(temp < 1 || temp > 2) {
+						done = false;
+						System.out.println("Invalid input. Please enter 1 to reroll 1s, or 2 to not: ");
+					}else {
+						done = true;
+					}
 				}catch(InputMismatchException x) {
-					System.out.println("Invalid input. Please enter \"true\" to reroll 1s, or \"false\" to not: ");
+					System.out.println("Invalid input. Please enter 1 to reroll 1s, or 2 to not: ");
 					input.next();
 				}
 			}
+			reroll = (temp == 1) ? true : false;
 		}
 
 		//TODO verify input here
 		System.out.println("Enter the name of the class you wish to play, or 'random' to have one picked for you: ");
 		playerClass = input.next().toLowerCase().trim();
 
-		//TODO fighter stuff
 		int temp = 0;
 		if(playerClass.equals("fighter")) {
-			System.out.println("Enter 1 to focus on strength; enter 2 to focus on dexterity: ");
-			//XXX
-			System.out.println("Enter 1 if you'd like to be an Eldritch Knight, or 2 if not: ");
-			//XXX
+			System.out.println("Enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
+			System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
+			done = false;
+			while(!done) {
+				try {
+					temp = input.nextInt();
+					if(temp < 1 || temp > 4) {
+						System.out.println("Invalid input.");
+						System.out.println("Please enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
+						System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
+						done = false;
+					}else if(temp == 1) {
+						playerClass = "str_fighter";
+						done = true;
+					}else if(temp == 2) {
+						playerClass = "dex_fighter";
+						done = true;
+					}else if(temp == 3) {
+						playerClass = "str_fighter_ek";
+						done = true;
+					}else if(temp == 4) {
+						playerClass = "dex_fighter_ek";
+						done = true;
+					}
+				}catch(InputMismatchException x) {
+					System.out.println("Invalid input.");
+					System.out.println("Please enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
+					System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
+					input.next();
+				}
+			}
 		}else if(playerClass.equals("rogue")) {
 			System.out.println("Enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
 			done = false;
