@@ -96,7 +96,8 @@ public class StatGeneration {
 		//TODO verify input here
 		System.out.println("Enter the name of the class you wish to play, or 'random' to have one picked for you: ");
 		playerClass = input.next().toLowerCase().trim();
-
+		String className = playerClass;
+		
 		int temp = 0;
 		if(playerClass.equals("fighter")) {
 			System.out.println("Enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
@@ -155,18 +156,23 @@ public class StatGeneration {
 		}
 		
 		stats = generateStats(stats, statOption, reroll);
-		
-		
+	
 
-		System.out.println("Your name is: " + name);
 		if(playerClass.equals("random")) {
 			PlayerClass classes[] = PlayerClass.values();
-			String randomClass = classes[chooser.nextInt(16)].toString().toLowerCase();
-			System.out.println("Your class is: " + randomClass);
-			printStats(randomClass, stats);
-		}else {
-			printStats(playerClass, stats);
+			playerClass = classes[chooser.nextInt(16)].toString().toLowerCase();
+			if(playerClass.contains("rogue")) {
+				className = "rogue";
+			}else if(playerClass.contains("fighter")) {
+				className = "fighter";
+			}else {
+				className = playerClass;
+			}
 		}
+
+		System.out.println("You are " + name + ", a " + className + ".");
+		printStats(playerClass, stats);
+		
 		
 		input.close();
 	}
@@ -264,7 +270,7 @@ public class StatGeneration {
 		//Sorceror: Cha > Con > Dex > Wis > Int > Str {same as Warlock}
 		//Warlock: Cha > Con > Dex > Wis > Int > Str {same as Sorceror}
 		//Wizard: Int > Con > Wis > Cha > Dex > Str
-				
+
 		System.out.println("Your stats are: ");
 		if(playerClass.equals("barbarian")) {
 			System.out.println("Strength: " + stats[0]);
