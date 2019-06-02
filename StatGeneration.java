@@ -32,65 +32,21 @@ public class StatGeneration {
 		Scanner input = new Scanner(System.in);
 		
 		System.out.println("Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
-		while(!done) {
-			try {
-				nameOption = input.nextInt();
-				if(nameOption < 1  || nameOption > 3) {
-					done = false;
-					System.out.println("Invalid input. Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
-				}else {
-					if(nameOption == 3) {
-						nameOption = chooser.nextInt(2) + 1;
-					}
-					name = nameGenerator(nameOption);
-					done = true;
-				}
-			}catch(InputMismatchException x) {
-				System.out.println("Invalid input. Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
-				input.next();
-			}
+		nameOption = getValidInput(1, 3);
+		if(nameOption == 3) {
+			nameOption = chooser.nextInt(2) + 1;
 		}
-
-		done = false;
-		
+		name = nameGenerator(nameOption);
+	
 		System.out.println("Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
-		while(!done) {
-			try {
-				statOption = input.nextInt();
-				if(statOption < 1 || statOption > 3) {
-					done = false;
-					System.out.println("Invalid input. Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
-				}else {
-					done = true;
-				}
-			}catch(InputMismatchException x) {
-				System.out.println("Invalid input. Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
-				input.next();
-			}
-
-		}
+		statOption = getValidInput(1, 3);
 
 		if(statOption != 1) { //can't reroll a predetermined array
 			System.out.println("Enter 1 to reroll 1s, or 2 to not: ");
-			//could have user enter true/false and read a boolean, but it would be awkward with every other option being
-			//determined by 1/2/etc
-			done = false;
-			int temp = 0;
-			while(!done) {
-				try {
-					temp = input.nextInt();
-					if(temp < 1 || temp > 2) {
-						done = false;
-						System.out.println("Invalid input. Please enter 1 to reroll 1s, or 2 to not: ");
-					}else {
-						done = true;
-					}
-				}catch(InputMismatchException x) {
-					System.out.println("Invalid input. Please enter 1 to reroll 1s, or 2 to not: ");
-					input.next();
-				}
-			}
-			reroll = (temp == 1) ? true : false;
+			//could have user enter true/false and read a boolean, but it would be awkward with every other option being determined by 1/2/etc
+			int rerollOption = 0;
+			rerollOption = getValidInput(1,2);
+			reroll = (rerollOption == 1) ? true : false;
 		}
 
 		//TODO verify input here
@@ -102,55 +58,30 @@ public class StatGeneration {
 		if(playerClass.equals("fighter")) {
 			System.out.println("Enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
 			System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
-			done = false;
-			while(!done) {
-				try {
-					temp = input.nextInt();
-					if(temp < 1 || temp > 4) {
-						System.out.println("Invalid input.");
-						System.out.println("Please enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
-						System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
-						done = false;
-					}else if(temp == 1) {
-						playerClass = "str_fighter";
-						done = true;
-					}else if(temp == 2) {
-						playerClass = "dex_fighter";
-						done = true;
-					}else if(temp == 3) {
-						playerClass = "str_fighter_ek";
-						done = true;
-					}else if(temp == 4) {
-						playerClass = "dex_fighter_ek";
-						done = true;
-					}
-				}catch(InputMismatchException x) {
-					System.out.println("Invalid input.");
-					System.out.println("Please enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
-					System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
-					input.next();
-				}
+			temp = getValidInput(1,4);
+			if(temp == 1) {
+				playerClass = "str_fighter";
+				done = true;
+			}else if(temp == 2) {
+				playerClass = "dex_fighter";
+				done = true;
+			}else if(temp == 3) {
+				playerClass = "str_fighter_ek";
+				done = true;
+			}else if(temp == 4) {
+				playerClass = "dex_fighter_ek";
+				done = true;
 			}
+				
 		}else if(playerClass.equals("rogue")) {
 			System.out.println("Enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
-			done = false;
-			while(!done) {
-				try {
-					temp = input.nextInt();
-					if(temp != 1 && temp != 2) {
-						System.out.println("Invalid input. Please enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
-						done = false;
-					}else if(temp == 1) {
-						playerClass = "int_rogue";
-						done = true;
-					}else if(temp == 2) {
-						playerClass = "cha_rogue";
-						done = true;
-					}
-				}catch(InputMismatchException x) {
-					System.out.println("Invalid input. Please enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
-					input.next();
-				}
+			temp = getValidInput(1,2);
+			 if(temp == 1) {
+				playerClass = "int_rogue";
+				done = true;
+			}else if(temp == 2) {
+				playerClass = "cha_rogue";
+				done = true;
 			}
 
 		}
@@ -175,6 +106,31 @@ public class StatGeneration {
 		
 		
 		input.close();
+	}
+	
+	public static int getValidInput(int min, int max) {
+		int validInput = 1;
+		boolean done = false;
+		
+		Scanner input = new Scanner(System.in);
+		
+		while(!done) {
+			try {
+				validInput = input.nextInt();
+				if(validInput < min || validInput > max) {
+					System.out.println("Invalid input. Please enter a number between " + min + " and " + max);					
+					done = false;
+				}else {
+					done = true;
+				}
+			}catch(InputMismatchException x) {
+				System.out.println("Invalid input. Please enter a number between " + min + " and " + max);
+				input.next();
+			}
+		}
+		
+		input.close();
+		return validInput;
 	}
 	
 	public static int fourDropLowest(boolean reroll) {
