@@ -14,7 +14,6 @@ enum PlayerClass{
 //TODO: clean up; make sure all inputs are being validated
 //	Ideas for future additions:
 //		let player choose race and adjust stats and name accordingly
-//		format idea: "You are [name], a [class]: "
 //		re-make with buttons/dropdown menus instead of number entry for option choice
 public class StatGeneration {
 	public static void main(String[] args) throws IOException {
@@ -33,19 +32,19 @@ public class StatGeneration {
 		Scanner input = new Scanner(System.in);
 		
 		System.out.println("Enter 1 for a male name, 2 for a female name, or 3 to have it decided for you: ");
-		nameOption = getValidInput(1, 3);
+		nameOption = getValidInput(1, 3, input);
 		if(nameOption == 3) {
 			nameOption = chooser.nextInt(2) + 1;
 		}
 		name = nameGenerator(nameOption);
 	
 		System.out.println("Enter 1 for standard array, 2 for 3d6, or 3 for 4d6 drop lowest: ");
-		statOption = getValidInput(1, 3);
+		statOption = getValidInput(1, 3, input);
 
 		if(statOption != 1) { //can't reroll a predetermined array
 			System.out.println("Enter 1 to reroll 1s, or 2 to not: ");
 			//could have user enter true/false and read a boolean, but it would be awkward with every other option being determined by 1/2/etc
-			rerollOption = getValidInput(1,2);
+			rerollOption = getValidInput(1,2, input);
 			reroll = (rerollOption == 1) ? true : false;
 		}
 
@@ -58,7 +57,7 @@ public class StatGeneration {
 		if(playerClass.equals("fighter")) {
 			System.out.println("Enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
 			System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
-			subclassOption = getValidInput(1,4);
+			subclassOption = getValidInput(1,4, input);
 			if(subclassOption == 1) {
 				playerClass = "str_fighter";
 			}else if(subclassOption == 2) {
@@ -71,7 +70,7 @@ public class StatGeneration {
 				
 		}else if(playerClass.equals("rogue")) {
 			System.out.println("Enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
-			subclassOption = getValidInput(1,2);
+			subclassOption = getValidInput(1,2, input);
 			 if(subclassOption == 1) {
 				playerClass = "int_rogue";
 			}else if(subclassOption == 2) {
@@ -102,11 +101,10 @@ public class StatGeneration {
 		input.close();
 	}
 	
-	public static int getValidInput(int min, int max) {
+	public static int getValidInput(int min, int max, Scanner input) {
 		int validInput = 0;
 		boolean done = false;
 		
-		Scanner input = new Scanner(System.in);
 		
 		while(!done) {
 			try {
@@ -122,8 +120,7 @@ public class StatGeneration {
 				input.next();
 			}
 		}
-		
-		input.close();
+
 		return validInput;
 	}
 	
