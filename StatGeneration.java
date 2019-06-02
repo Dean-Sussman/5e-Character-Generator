@@ -20,8 +20,9 @@ public class StatGeneration {
 	public static void main(String[] args) throws IOException {
 		int statOption = 0;
 		int nameOption = 0;
+		int subclassOption = 0;
+		int rerollOption = 0;
 		boolean reroll = false;
-		boolean done = false;
 		Random chooser = new Random();
 		String playerClass = "random";
 		String name = "";
@@ -44,7 +45,6 @@ public class StatGeneration {
 		if(statOption != 1) { //can't reroll a predetermined array
 			System.out.println("Enter 1 to reroll 1s, or 2 to not: ");
 			//could have user enter true/false and read a boolean, but it would be awkward with every other option being determined by 1/2/etc
-			int rerollOption = 0;
 			rerollOption = getValidInput(1,2);
 			reroll = (rerollOption == 1) ? true : false;
 		}
@@ -54,34 +54,28 @@ public class StatGeneration {
 		playerClass = input.next().toLowerCase().trim();
 		String className = playerClass;
 		
-		int temp = 0;
+
 		if(playerClass.equals("fighter")) {
 			System.out.println("Enter 1 to be a strength-based fighter, 2 to be a dexterity-based fighter, ");
 			System.out.println("3 to be a strength-based Eldritch Knight, or 4 to be a dexterity-based Eldritch Knight: ");
-			temp = getValidInput(1,4);
-			if(temp == 1) {
+			subclassOption = getValidInput(1,4);
+			if(subclassOption == 1) {
 				playerClass = "str_fighter";
-				done = true;
-			}else if(temp == 2) {
+			}else if(subclassOption == 2) {
 				playerClass = "dex_fighter";
-				done = true;
-			}else if(temp == 3) {
+			}else if(subclassOption == 3) {
 				playerClass = "str_fighter_ek";
-				done = true;
-			}else if(temp == 4) {
+			}else if(subclassOption == 4) {
 				playerClass = "dex_fighter_ek";
-				done = true;
 			}
 				
 		}else if(playerClass.equals("rogue")) {
 			System.out.println("Enter 1 to focus on Intelligence (Arcane Trickster/Investigation), or 2 to focus on Charisma (Deception/Social interaction): ");
-			temp = getValidInput(1,2);
-			 if(temp == 1) {
+			subclassOption = getValidInput(1,2);
+			 if(subclassOption == 1) {
 				playerClass = "int_rogue";
-				done = true;
-			}else if(temp == 2) {
+			}else if(subclassOption == 2) {
 				playerClass = "cha_rogue";
-				done = true;
 			}
 
 		}
@@ -109,7 +103,7 @@ public class StatGeneration {
 	}
 	
 	public static int getValidInput(int min, int max) {
-		int validInput = 1;
+		int validInput = 0;
 		boolean done = false;
 		
 		Scanner input = new Scanner(System.in);
