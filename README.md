@@ -2,7 +2,7 @@
 
 Allows for the generation of a character, made to be playable using Dungeons and Dragons, fifth edition.
 
-Randomly chooses first and last names from US Census data; the user can choose whether they want a male name, a female name, or to have one chosen for them.
+Randomly chooses first and last names from large lists; the user can choose whether they want a male name, a female name, or to have one chosen for them. The lists are pulled from the US Census website, and use their data.
 
 Rolls for character stats using one of several methods. Supports the standard array, rolling three six-sided die, and rolling four six-sided die and dropping the lowest.
 The user can also choose to allow for rerolling any 1s rolled by the above dice-rolling methods, in order to allow for higher average stats.
